@@ -3,149 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universo Vibras Positivas | HaroldCo</title>
+    <title>Directorio Vibras Positivas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             background-color: #050505;
             overflow: hidden; 
             font-family: 'Arial Black', sans-serif;
-            background-image: radial-gradient(circle, #1e293b 1px, transparent 1px);
-            background-size: 30px 30px;
         }
-        .crazy-link {
+        .boton-loco {
             position: absolute;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            user-select: none;
             z-index: 10;
-            white-space: nowrap;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            text-align: center;
+            min-width: 150px;
         }
-        .floating {
-            animation: float 5s ease-in-out infinite;
+        .cansado {
+            box-shadow: 0 0 30px #fbbf24 !important;
+            border: 4px solid #ffffff !important;
+            transform: scale(1.1) !important;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(3deg); }
-        }
-        #logo-container {
+        #boton-control {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-        }
-        #logo-container img {
-            width: 110px;
-            filter: drop-shadow(0 0 10px #fbbf24);
-        }
-        .category-tag {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            background: rgba(0,0,0,0.3);
-            padding: 2px 5px;
-            border-radius: 4px;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
         }
     </style>
 </head>
 <body class="h-screen w-screen">
 
-    <div id="logo-container">
-        <img src="VIBRASPOSITIVAS.PNG" alt="Logo Vibras" class="hover:scale-110 transition-transform">
+    <button id="boton-control" onclick="alternarMovimiento()" class="bg-white text-black px-8 py-4 rounded-full font-bold shadow-2xl hover:bg-yellow-400 transition-colors border-2 border-black">
+        ¡DETENER MOVIMIENTO! ❄️
+    </button>
+
+    <div class="fixed top-5 right-5 z-100">
+        <img src="VIBRASPOSITIVAS.PNG" alt="Logo" class="w-24 drop-shadow-lg">
     </div>
 
-    <div class="fixed top-6 left-6 z-50 pointer-events-none">
-        <h1 class="text-4xl md:text-6xl font-black text-white leading-none">VIBRAS<br><span class="text-yellow-400">WORLD</span></h1>
-        <p class="text-gray-400 text-xs mt-2 tracking-[0.3em] font-bold">MULTINEGOCIOS & APPS</p>
+    <div class="fixed top-10 left-10 z-50 pointer-events-none">
+        <h1 class="text-4xl font-black text-white leading-none">VIBRAS<br><span class="text-yellow-400">POSITIVAS</span></h1>
+        <p class="text-gray-400 text-xs mt-2 tracking-widest uppercase">Nuestras Distribuidoras</p>
     </div>
 
-    <div id="canvas" class="w-full h-full relative"></div>
+    <div id="contenedor-principal" class="w-full h-full relative"></div>
 
     <script>
-        const apps = [
-            // CATEGORÍA: DISTRILECO (Consumo Masivo)
-            { name: "SUPER ARROZ", path: "super-arroz-app", color: "bg-orange-600", tag: "DISTRILECO" },
-            { name: "VISTA HERMOSA", path: "vista-hermosa-cat", color: "bg-emerald-600", tag: "PRODUCTOS" },
-            { name: "DISTRILECO VENTAS", path: "distrileco-main", color: "bg-blue-700", tag: "B2B" },
-            
-            // CATEGORÍA: RESTAURANTES & COMIDA
-            { name: "EL BUEN SABOR", path: "restaurante-sabor", color: "bg-red-500", tag: "RESTAURANTE" },
-            { name: "VIBRAS FOOD", path: "vibras-food", color: "bg-yellow-600", tag: "COMIDA" },
-            { name: "MENÚ DIGITAL", path: "menu-interactivo", color: "bg-rose-500", tag: "DELIVERY" },
-            
-            // CATEGORÍA: SERVICIOS
-            { name: "LOGÍSTICA", path: "servicios-logistica", color: "bg-slate-500", tag: "SERVICIOS" },
-            { name: "ASESORÍAS", path: "asesoria-vibras", color: "bg-indigo-600", tag: "PRO" },
-            { name: "REPOSICIÓN", path: "reposicion-vibras", color: "bg-cyan-600", tag: "RETIRO" },
-            
-            // CATEGORÍA: APPS & TECNOLOGÍA
-            { name: "APP NOTAS ✨", path: "app-notas-vibras", color: "bg-pink-500", tag: "HERRAMIENTA" },
-            { name: "CALCULADORA", path: "calculadora-cool", color: "bg-violet-500", tag: "TECH" },
-            { name: "VIBRAS MAIN", path: "vibras-main", color: "bg-yellow-400", tag: "PORTAL" },
-            { name: "MARKETPLACE", path: "market-vibras", color: "bg-teal-500", tag: "TIENDA" },
-            
-            // CATEGORÍA: OTROS
-            { name: "SORPRESA 🎁", path: "app-sorpresa", color: "bg-lime-500", tag: "EXTRA" },
-            { name: "EVENTOS", path: "vibras-eventos", color: "bg-fuchsia-600", tag: "SOCIAL" }
+        let detenido = false;
+
+        // LISTA EXACTA DE TUS URLS
+        const misNegocios = [
+            { nombre: "DISTRILECO 🏢", ruta: "distrileco/index.html", color: "bg-blue-600" },
+            { nombre: "BODEGA LA CENTRAL 🏪", ruta: "bodega-la-central/index.html", color: "bg-red-600" },
+            { nombre: "DISTRIBUCIONES JM 🚚", ruta: "distribuciones-jm/index.html", color: "bg-emerald-600" },
+            { nombre: "EDOGRA DISTRIBUCIONES 📦", ruta: "edogra-distribuciones/index.html", color: "bg-purple-600" },
+            { nombre: "SUPER ARROZ 🍚", ruta: "super-arroz-app/index.html", color: "bg-orange-500" },
+            { nombre: "VISTA HERMOSA 🌅", ruta: "vista-hermosa-cat/index.html", color: "bg-pink-600" }
         ];
 
-        const username = "haroldco45";
-        const repo = "vibras-positivas-apps";
-        const canvas = document.getElementById('canvas');
+        function alternarMovimiento() {
+            detenido = !detenido;
+            const btn = document.getElementById('boton-control');
+            btn.innerText = detenido ? "¡ACTIVAR MOVIMIENTO! 🔥" : "¡DETENER MOVIMIENTO! ❄️";
+        }
 
-        apps.forEach((app) => {
-            const btn = document.createElement('a');
-            btn.href = `https://${username}.github.io/${repo}/${app.path}/`;
-            btn.target = "_blank";
+        const baseLink = "https://haroldco45.github.io/vibras-positivas-apps/";
+        const contenedor = document.getElementById('contenedor-principal');
+
+        misNegocios.forEach((negocio) => {
+            const boton = document.createElement('a');
+            boton.href = baseLink + negocio.ruta;
+            boton.target = "_blank";
+            boton.innerText = negocio.nombre;
+            boton.className = `boton-loco ${negocio.color} text-white px-6 py-5 rounded-2xl font-black border-2 border-white/50 shadow-xl`;
             
-            // Crear el contenido del botón con etiqueta de categoría
-            btn.innerHTML = `
-                <div class="flex flex-col items-start">
-                    <span class="category-tag">${app.tag}</span>
-                    <span>${app.name}</span>
-                </div>
-            `;
+            let escapes = 0; 
             
-            btn.className = `crazy-link ${app.color} text-white px-6 py-3 rounded-xl font-black shadow-[6px_6px_0px_0px_rgba(255,255,255,0.2)] border-2 border-white/50 floating`;
-            
-            // Posicionamiento aleatorio inicial
-            let x = Math.random() * (window.innerWidth - 220);
+            // Ubicación aleatoria inicial
+            let x = Math.random() * (window.innerWidth - 200);
             let y = Math.random() * (window.innerHeight - 200);
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
+            boton.style.left = x + 'px';
+            boton.style.top = y + 'px';
 
-            // Lógica de escape mejorada
-            btn.onmouseover = () => {
-                const newX = Math.random() * (window.innerWidth - 220);
-                const newY = Math.random() * (window.innerHeight - 200);
-                btn.style.left = newX + 'px';
-                btn.style.top = newY + 'px';
-                btn.style.transform = `scale(${Math.random() * 0.4 + 0.9}) rotate(${Math.random() * 40 - 20}deg)`;
-                btn.style.zIndex = parseInt(btn.style.zIndex || 10) + 1;
+            // Función de huida al pasar el mouse
+            boton.onmouseover = () => {
+                if (detenido || escapes >= 3) return;
+
+                const nuevaX = Math.random() * (window.innerWidth - 200);
+                const nuevaY = Math.random() * (window.innerHeight - 200);
+                boton.style.left = nuevaX + 'px';
+                boton.style.top = nuevaY + 'px';
+                
+                escapes++;
+                
+                if (escapes >= 3) {
+                    boton.classList.add('cansado');
+                    boton.innerHTML = `${negocio.nombre}<br><span class="text-[10px] text-yellow-200">¡ATRÁPAME!</span>`;
+                }
             };
 
-            canvas.appendChild(btn);
+            contenedor.appendChild(boton);
         });
 
-        // Efecto visual de fondo al hacer clic
+        // Efecto visual de clics
         window.onclick = (e) => {
-            if(e.target.tagName !== 'A' && e.target.parentNode.tagName !== 'A') {
-                const ring = document.createElement('div');
-                ring.className = "fixed border-4 border-yellow-400 rounded-full pointer-events-none z-0";
-                ring.style.left = e.clientX + "px";
-                ring.style.top = e.clientY + "px";
-                ring.style.width = "10px";
-                ring.style.height = "10px";
-                document.body.appendChild(ring);
+            if(e.target.tagName !== 'A') {
+                const punto = document.createElement('div');
+                punto.innerText = "⚡";
+                punto.className = "fixed pointer-events-none text-3xl";
+                punto.style.left = e.clientX + "px";
+                punto.style.top = e.clientY + "px";
+                document.body.appendChild(punto);
+                
+                punto.animate([
+                    { transform: 'scale(1)', opacity: 1 },
+                    { transform: 'scale(3) rotate(45deg)', opacity: 0 }
+                ], { duration: 500 });
 
-                ring.animate([
-                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
-                    { transform: 'translate(-50%, -50%) scale(20)', opacity: 0 }
-                ], { duration: 600, easing: 'ease-out' });
-
-                setTimeout(() => ring.remove(), 600);
+                setTimeout(() => punto.remove(), 500);
             }
         };
     </script>
