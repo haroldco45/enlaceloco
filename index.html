@@ -3,125 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vibras Apps</title>
+    <title>Vibras Positivas Apps</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { 
             background-color: #050505; 
             overflow: hidden; 
             font-family: 'Arial Black', sans-serif;
-            touch-action: manipulation; /* Optimiza toques en móvil */
+            touch-action: none;
         }
         .boton-loco {
             position: absolute;
-            transition: all 0.15s ease-out;
+            transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer; 
             z-index: 10;
-            display: flex; align-items: center; justify-content: center;
-            min-width: 120px; 
-            font-size: 12px; /* Más pequeño para móvil */
-            padding: 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-width: 130px; 
+            padding: 12px;
             text-align: center;
+            border-radius: 15px;
+            user-select: none;
         }
-        /* Panel súper chiquito */
-        #panel-admin {
-            position: fixed; top: 5px; right: 5px;
-            background: rgba(255,255,255,0.05); 
-            padding: 5px;
-            border-radius: 5px; z-index: 1000; 
-            backdrop-filter: blur(10px);
-            width: 110px; /* Muy estrecho */
-        }
-        #panel-admin input {
-            width: 100%; font-size: 9px; padding: 2px; margin-bottom: 2px;
-            background: #222; color: white; border: none; border-radius: 2px;
-        }
-        #boton-control {
-            position: fixed; bottom: 2px; left: 2px;
-            font-size: 6px; opacity: 0.1; color: white;
+        /* Decoraciones aleatorias */
+        .estilo-rayas { border-style: dashed !important; }
+        .estilo-doble { border-style: double !important; border-width: 6px !important; }
+        .estilo-puntos { border-style: dotted !important; }
+        .sombra-fuerte { box-shadow: 10px 10px 0px 0px rgba(255,255,255,0.2); }
+
+        #logo-fijo {
+            position: fixed; top: 15px; right: 15px;
+            width: 70px; z-index: 100; filter: drop-shadow(0 0 5px #fff);
         }
     </style>
 </head>
 <body class="h-screen w-screen">
 
-    <button id="boton-control" onclick="detenido = !detenido">detener</button>
+    <img src="VIBRASPOSITIVAS.PNG" id="logo-fijo" alt="Logo">
 
-    <div id="panel-admin">
-        <input type="text" id="nombre-app" placeholder="Nombre...">
-        <input type="text" id="url-app" placeholder="Carpeta...">
-        <div class="flex gap-1">
-            <button onclick="agregarNuevaUrl()" class="bg-yellow-400 text-[8px] font-bold p-1 flex-1 rounded">AÑADIR</button>
-            <button onclick="limpiarPantalla()" class="bg-red-600 text-[8px] text-white p-1 rounded">🗑️</button>
-        </div>
+    <div class="fixed top-8 left-6 z-50 pointer-events-none">
+        <h1 class="text-3xl font-black text-white leading-none">VIBRAS<br><span class="text-yellow-400 text-5xl">APPS</span></h1>
+        <p class="text-white text-[10px] tracking-[0.4em] opacity-50 mt-1">TOCA PARA ENTRAR</p>
     </div>
 
-    <div class="fixed top-4 left-4 z-50 pointer-events-none">
-        <h1 class="text-xl font-black text-white leading-none">VIBRAS<br><span class="text-yellow-400 text-2xl">POSS</span></h1>
-    </div>
-
-    <div id="contenedor-principal" class="w-full h-full relative"></div>
+    <div id="universo-links" class="w-full h-full relative"></div>
 
     <script>
-        let detenido = false;
-        const baseLink = "https://haroldco45.github.io/vibras-positivas-apps/";
-        const contenedor = document.getElementById('contenedor-principal');
+        const contenedor = document.getElementById('universo-links');
+        const base = "https://haroldco45.github.io/vibras-positivas-apps/";
 
-        function crearBoton(negocio) {
-            const boton = document.createElement('a');
-            boton.href = negocio.ruta.includes('http') ? negocio.ruta : baseLink + negocio.ruta;
-            boton.target = "_blank";
-            boton.innerText = negocio.nombre;
-            boton.className = `boton-loco ${negocio.color} text-white rounded-xl font-bold border border-white/30 shadow-lg`;
-            
-            // Posicionamiento inicial aleatorio dentro de los límites
-            boton.style.left = Math.random() * (window.innerWidth - 130) + 'px';
-            boton.style.top = Math.random() * (window.innerHeight - 130) + 'px';
-
-            // Para quitar en móvil: toque largo (300ms) o Alt+Click en PC
-            let timer;
-            boton.ontouchstart = () => timer = setTimeout(() => boton.remove(), 600);
-            boton.ontouchend = () => clearTimeout(timer);
-            
-            boton.onclick = (e) => {
-                if (e.altKey) { e.preventDefault(); boton.remove(); }
-            };
-
-            // Movimiento loco (en móvil se mueve al tocarlo)
-            const mover = () => {
-                if (detenido) return;
-                boton.style.left = Math.random() * (window.innerWidth - 130) + 'px';
-                boton.style.top = Math.random() * (window.innerHeight - 130) + 'px';
-            };
-
-            boton.onmouseover = mover;
-            boton.ontouchmove = mover;
-            
-            contenedor.appendChild(boton);
-        }
-
-        function agregarNuevaUrl() {
-            const nombre = document.getElementById('nombre-app').value;
-            const ruta = document.getElementById('url-app').value;
-            if(nombre && ruta) {
-                const colores = ['bg-pink-600', 'bg-blue-600', 'bg-green-600', 'bg-purple-600', 'bg-orange-600'];
-                crearBoton({ nombre: nombre, ruta: ruta, color: colores[Math.floor(Math.random()*5)] });
-                document.getElementById('nombre-app').value = "";
-                document.getElementById('url-app').value = "";
-            }
-        }
-
-        function limpiarPantalla() {
-            if(confirm("¿Borrar todo?")) contenedor.innerHTML = "";
-        }
-
-        // Apps iniciales
-        const iniciales = [
-            { nombre: "DISTRILECO", ruta: "distrileco/", color: "bg-blue-600" },
-            { nombre: "BODEGA", ruta: "bodega-la-central/", color: "bg-red-600" },
-            { nombre: "JM", ruta: "distribuciones-jm/", color: "bg-emerald-600" },
-            { nombre: "EDOGRA", ruta: "edogra-distribuciones/", color: "bg-purple-600" }
+        // LISTA MAESTRA DE TODAS TUS APPS
+        const misApps = [
+            { n: "DISTRILECO", r: "distrileco/" },
+            { n: "BODEGA CENTRAL", r: "bodega-la-central/" },
+            { n: "DISTRI JM", r: "distribuciones-jm/" },
+            { n: "EDOGRA", r: "edogra-distribuciones/" },
+            { n: "SUPER ARROZ", r: "super-arroz-app/" },
+            { n: "VISTA HERMOSA", r: "vista-hermosa-cat/" },
+            { n: "NOTAS VIBRAS", r: "app-notas-vibras/" },
+            { n: "CALCULADORA", r: "calculadora-cool/" },
+            { n: "VIBRAS MAIN", r: "vibras-main/" },
+            { n: "REPOSICIÓN", r: "reposicion-app/" },
+            { n: "MARKET VIBRAS", r: "market-vibras/" },
+            { n: "LOGÍSTICA", r: "logistica-distrileco/" }
         ];
-        iniciales.forEach(crearBoton);
+
+        // Generador de colores vibrantes que no se repiten fácilmente
+        function obtenerColorAleatorio() {
+            const colores = [
+                '#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', 
+                '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#d946ef'
+            ];
+            return colores[Math.floor(Math.random() * colores.length)];
+        }
+
+        // Generador de decoraciones visuales
+        function aplicarEstiloAleatorio(elemento) {
+            const estilos = ['estilo-rayas', 'estilo-doble', 'estilo-puntos', 'sombra-fuerte'];
+            const estiloAzar = estilos[Math.floor(Math.random() * estilos.length)];
+            elemento.classList.add(estiloAzar);
+            
+            // Símbolos locos aleatorios
+            const simbolos = ['⚡', '✨', '🔥', '🚀', '💎', '🌈'];
+            const simbolo = simbolos[Math.floor(Math.random() * simbolos.length)];
+            elemento.innerHTML = `<span class="text-xs opacity-70">${simbolo}</span> <b class="text-xs">${elemento.innerText}</b>`;
+        }
+
+        misApps.forEach((app) => {
+            const btn = document.createElement('a');
+            btn.href = base + app.r;
+            btn.target = "_blank";
+            btn.innerText = app.n;
+            btn.className = "boton-loco border-2 border-white text-white font-bold";
+            
+            // Color de fondo único
+            btn.style.backgroundColor = obtenerColorAleatorio();
+            
+            // Aplicar decoraciones (rayitas, bordes, símbolos)
+            aplicarEstiloAleatorio(btn);
+
+            // Posición inicial
+            btn.style.left = Math.random() * (window.innerWidth - 140) + 'px';
+            btn.style.top = Math.random() * (window.innerHeight - 140) + 'px';
+
+            // Función de movimiento (Huida rápida)
+            const huir = (e) => {
+                // En móvil, dejamos que el primer toque mueva, pero si tocan rápido entran
+                btn.style.left = Math.random() * (window.innerWidth - 140) + 'px';
+                btn.style.top = Math.random() * (window.innerHeight - 140) + 'px';
+                btn.style.transform = `rotate(${Math.random() * 20 - 10}deg) scale(1.1)`;
+            };
+
+            btn.onmouseover = huir;
+            btn.ontouchmove = huir;
+
+            contenedor.appendChild(btn);
+        });
+
+        // Fondo animado simple (Rayitos al tocar)
+        window.onclick = (e) => {
+            if(e.target.tagName !== 'A') {
+                const r = document.createElement('div');
+                r.innerText = "⚡";
+                r.className = "fixed text-yellow-400 text-4xl pointer-events-none";
+                r.style.left = e.clientX + "px";
+                r.style.top = e.clientY + "px";
+                document.body.appendChild(r);
+                setTimeout(() => r.remove(), 400);
+            }
+        };
     </script>
 </body>
 </html>
