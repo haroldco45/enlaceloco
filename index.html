@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio Loco | Vibras Positivas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            overflow: hidden; /* Para que los links no se salgan de la pantalla */
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        .crazy-link {
+            position: absolute;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        #logo-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col items-center justify-center">
 
+    <div id="logo-container">
+        <img src="VIBRASPOSITIVAS.PNG" alt="Vibras Positivas Logo" class="w-32 hover:scale-110 transition-transform">
+    </div>
+
+    <h1 class="text-4xl font-bold text-yellow-400 mb-8 z-50 text-center">✨ ¡Toca un link si puedes! ✨</h1>
+
+    <div id="canvas" class="relative w-full h-full">
+        </div>
+
+    <script>
+        const links = [
+            { name: "Google", url: "https://google.com", color: "bg-pink-500" },
+            { name: "YouTube", url: "https://youtube.com", color: "bg-red-500" },
+            { name: "Mi Facebook", url: "#", color: "bg-blue-500" },
+            { name: "Música Chill", url: "#", color: "bg-green-500" },
+            { name: "Sorpresa 🎁", url: "#", color: "bg-purple-500" },
+            { name: "Vibras ⚡", url: "#", color: "bg-yellow-500" }
+        ];
+
+        const canvas = document.getElementById('canvas');
+
+        links.forEach((link, index) => {
+            const btn = document.createElement('a');
+            btn.href = link.url;
+            btn.target = "_blank";
+            btn.innerText = link.name;
+            btn.className = `crazy-link ${link.color} text-white px-6 py-3 rounded-full font-bold shadow-lg border-2 border-white floating`;
+            
+            // Posición inicial aleatoria
+            let x = Math.random() * (window.innerWidth - 150);
+            let y = Math.random() * (window.innerHeight - 150);
+            
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+
+            // EFECTO LOCO: El botón escapa cuando intentas clickearlo (al pasar el mouse)
+            btn.onmouseover = () => {
+                const newX = Math.random() * (window.innerWidth - 150);
+                const newY = Math.random() * (window.innerHeight - 150);
+                btn.style.left = newX + 'px';
+                btn.style.top = newY + 'px';
+                btn.style.transform = `scale(${Math.random() + 0.5}) rotate(${Math.random() * 360}deg)`;
+            };
+
+            canvas.appendChild(btn);
+        });
+
+        // Crear partículas de "Vibras Positivas" al hacer click
+        window.onclick = (e) => {
+            const star = document.createElement('div');
+            star.innerText = "✨";
+            star.style.position = "fixed";
+            star.style.left = e.clientX + "px";
+            star.style.top = e.clientY + "px";
+            star.style.fontSize = "24px";
+            star.style.pointerEvents = "none";
+            document.body.appendChild(star);
+            
+            setTimeout(() => star.remove(), 1000);
+        };
+    </script>
+</body>
+</html>
