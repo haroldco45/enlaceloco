@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vibras Positivas Apps</title>
+    <title>Universo Vibras Positivas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { 
@@ -18,21 +18,23 @@
             cursor: pointer; 
             z-index: 10;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-width: 130px; 
-            padding: 12px;
+            min-width: 110px; 
+            padding: 8px;
             text-align: center;
-            border-radius: 15px;
+            border-radius: 12px;
             user-select: none;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.3);
         }
-        /* Decoraciones aleatorias */
-        .estilo-rayas { border-style: dashed !important; }
-        .estilo-doble { border-style: double !important; border-width: 6px !important; }
-        .estilo-puntos { border-style: dotted !important; }
-        .sombra-fuerte { box-shadow: 10px 10px 0px 0px rgba(255,255,255,0.2); }
+        /* Estilos visuales variados */
+        .b-grueso { border-width: 3px !important; }
+        .b-puntos { border-style: dotted !important; }
+        .b-rayas { border-style: dashed !important; }
 
         #logo-fijo {
-            position: fixed; top: 15px; right: 15px;
-            width: 70px; z-index: 100; filter: drop-shadow(0 0 5px #fff);
+            position: fixed; top: 10px; right: 10px;
+            width: 60px; z-index: 100; filter: drop-shadow(0 0 5px #fff);
         }
     </style>
 </head>
@@ -40,9 +42,9 @@
 
     <img src="VIBRASPOSITIVAS.PNG" id="logo-fijo" alt="Logo">
 
-    <div class="fixed top-8 left-6 z-50 pointer-events-none">
-        <h1 class="text-3xl font-black text-white leading-none">VIBRAS<br><span class="text-yellow-400 text-5xl">APPS</span></h1>
-        <p class="text-white text-[10px] tracking-[0.4em] opacity-50 mt-1">TOCA PARA ENTRAR</p>
+    <div class="fixed top-6 left-6 z-50 pointer-events-none">
+        <h1 class="text-2xl font-black text-white leading-none">VIBRAS<br><span class="text-yellow-400 text-5xl">APPS</span></h1>
+        <p class="text-white text-[8px] tracking-[0.3em] opacity-60 font-bold uppercase">Directorio Completo Haroldco45</p>
     </div>
 
     <div id="universo-links" class="w-full h-full relative"></div>
@@ -51,79 +53,89 @@
         const contenedor = document.getElementById('universo-links');
         const base = "https://haroldco45.github.io/vibras-positivas-apps/";
 
-        // LISTA MAESTRA DE TODAS TUS APPS
+        // LISTA 100% EXTRAÍDA DE TU REPOSITORIO
         const misApps = [
-            { n: "DISTRILECO", r: "distrileco/" },
+            { n: "ABOCADOS", r: "abocados/" },
+            { n: "ALEJO MECÁNICO", r: "alejo-mecanicomoto-movil/" },
+            { n: "AREPA DON HUEVO", r: "arepadonhuevo/" },
+            { n: "AREPAS TRONCAL", r: "arepaslatroncal/" },
+            { n: "ASADOS DELY", r: "asadosdelypollos/" },
+            { n: "ATARRAYA", r: "atarraya/" },
+            { n: "BELLEZA YERALDIN", r: "bienestar-y-belleza-Yeraldin/" },
             { n: "BODEGA CENTRAL", r: "bodega-la-central/" },
+            { n: "CELUMASTER", r: "celumaster/" },
+            { n: "CREADORA QR", r: "creadoraqr/" },
+            { n: "DELEITE SALUDABLE", r: "deleitesaludable/" },
             { n: "DISTRI JM", r: "distribuciones-jm/" },
+            { n: "DISTRILECO", r: "distrileco/" },
+            { n: "DROGUERÍA INGLESA", r: "drogueria-inglesa/" },
+            { n: "DULCE BOCADO", r: "dulcebocadopostresycafe/" },
             { n: "EDOGRA", r: "edogra-distribuciones/" },
-            
+            { n: "ESTOS BURGERS", r: "estos-burgers/" },
+            { n: "AGUA ORQUÍDEA", r: "fabricadeagualaorquideaazul/" },
+            { n: "FERRETERÍA", r: "ferreteria-la-hacienda/" },
+            { n: "FRUVER CENTRAL", r: "fruver-lacentral/" },
+            { n: "INV. CHARLOTTE", r: "inversiones-charlotte/" },
+            { n: "LA BARBERÍA", r: "labarberia/" },
+            { n: "CASITA DE TATA", r: "lacasitadetata/" },
+            { n: "PIZZA FRANCO", r: "lapizzadefranco/" },
+            { n: "LAVADO SAS", r: "lavadoyaspiradosas/" },
+            { n: "LUZMAR", r: "luzmar/" },
+            { n: "MERCAFÁCIL", r: "mercafacil/" },
+            { n: "MINIPRECIOS", r: "miniprecios/" },
+            { n: "NELSON", r: "nelson/" },
+            { n: "ODONTOLOGÍA", r: "odontologia--estetica-bocas/" },
+            { n: "PAULA AREIZA", r: "paula-areiza/" },
+            { n: "POLLO HARANA", r: "pollo-harana/" },
+            { n: "REKEFOOD", r: "rekefood/" },
+            { n: "SANTUARIO", r: "santuariolaprimera/" },
+            { n: "SOTRACOR", r: "sotracor-caucasia/" },
+            { n: "TAXI EN LÍNEA", r: "taxienlinea/" },
+            { n: "TIENDA AZUL", r: "tienda-azul/" },
+            { n: "TIENDA CIELO", r: "tienda-cielo/" },
+            { n: "MALL TRIÁNGULO", r: "tienda-mall-el-triangulo/" },
+            { n: "TIENDA YIRE", r: "tienda-yire/" },
+            { n: "EL PROGRESO", r: "tiendaelprogreso/" }
         ];
 
-        // Generador de colores vibrantes que no se repiten fácilmente
-        function obtenerColorAleatorio() {
-            const colores = [
-                '#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', 
-                '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#d946ef'
-            ];
-            return colores[Math.floor(Math.random() * colores.length)];
-        }
+        const colores = [
+            '#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', 
+            '#ec4899', '#06b6d4', '#f97316', '#14b8a6', '#6366f1',
+            '#f43f5e', '#a855f7', '#0ea5e9', '#22c55e', '#eab308'
+        ];
 
-        // Generador de decoraciones visuales
-        function aplicarEstiloAleatorio(elemento) {
-            const estilos = ['estilo-rayas', 'estilo-doble', 'estilo-puntos', 'sombra-fuerte'];
-            const estiloAzar = estilos[Math.floor(Math.random() * estilos.length)];
-            elemento.classList.add(estiloAzar);
-            
-            // Símbolos locos aleatorios
-            const simbolos = ['⚡', '✨', '🔥', '🚀', '💎', '🌈'];
-            const simbolo = simbolos[Math.floor(Math.random() * simbolos.length)];
-            elemento.innerHTML = `<span class="text-xs opacity-70">${simbolo}</span> <b class="text-xs">${elemento.innerText}</b>`;
-        }
+        const bordes = ['b-grueso', 'b-puntos', 'b-rayas', ''];
+        const emojis = ['🛵', '🍛', '💈', '📱', '🚚', '📦', '🏢', '🍔', '🛒', '🦷'];
 
-        misApps.forEach((app) => {
+        misApps.forEach((app, index) => {
             const btn = document.createElement('a');
             btn.href = base + app.r;
             btn.target = "_blank";
-            btn.innerText = app.n;
-            btn.className = "boton-loco border-2 border-white text-white font-bold";
             
-            // Color de fondo único
-            btn.style.backgroundColor = obtenerColorAleatorio();
+            const emo = emojis[index % emojis.length];
+            btn.innerHTML = `<span class="text-xs">${emo}</span><span class="text-[8px] font-black leading-tight">${app.n}</span>`;
             
-            // Aplicar decoraciones (rayitas, bordes, símbolos)
-            aplicarEstiloAleatorio(btn);
+            btn.className = "boton-loco text-white";
+            btn.style.backgroundColor = colores[index % colores.length];
+            
+            const borde = bordes[Math.floor(Math.random() * bordes.length)];
+            if(borde) btn.classList.add(borde);
 
-            // Posición inicial
-            btn.style.left = Math.random() * (window.innerWidth - 140) + 'px';
-            btn.style.top = Math.random() * (window.innerHeight - 140) + 'px';
+            // Posición aleatoria inicial
+            btn.style.left = Math.random() * (window.innerWidth - 120) + 'px';
+            btn.style.top = Math.random() * (window.innerHeight - 120) + 'px';
 
-            // Función de movimiento (Huida rápida)
-            const huir = (e) => {
-                // En móvil, dejamos que el primer toque mueva, pero si tocan rápido entran
-                btn.style.left = Math.random() * (window.innerWidth - 140) + 'px';
-                btn.style.top = Math.random() * (window.innerHeight - 140) + 'px';
-                btn.style.transform = `rotate(${Math.random() * 20 - 10}deg) scale(1.1)`;
+            const mover = () => {
+                btn.style.left = Math.random() * (window.innerWidth - 120) + 'px';
+                btn.style.top = Math.random() * (window.innerHeight - 120) + 'px';
+                btn.style.transform = `rotate(${Math.random() * 30 - 15}deg) scale(1.1)`;
             };
 
-            btn.onmouseover = huir;
-            btn.ontouchmove = huir;
+            btn.onmouseover = mover;
+            btn.ontouchmove = mover;
 
             contenedor.appendChild(btn);
         });
-
-        // Fondo animado simple (Rayitos al tocar)
-        window.onclick = (e) => {
-            if(e.target.tagName !== 'A') {
-                const r = document.createElement('div');
-                r.innerText = "⚡";
-                r.className = "fixed text-yellow-400 text-4xl pointer-events-none";
-                r.style.left = e.clientX + "px";
-                r.style.top = e.clientY + "px";
-                document.body.appendChild(r);
-                setTimeout(() => r.remove(), 400);
-            }
-        };
     </script>
 </body>
 </html>
