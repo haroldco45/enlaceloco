@@ -2,47 +2,61 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Directorio Vibras Positivas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vibras Apps</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #050505; overflow: hidden; font-family: 'Arial Black', sans-serif; }
+        body { 
+            background-color: #050505; 
+            overflow: hidden; 
+            font-family: 'Arial Black', sans-serif;
+            touch-action: manipulation; /* Optimiza toques en móvil */
+        }
         .boton-loco {
             position: absolute;
-            transition: all 0.12s ease-out; /* ¡Más velocidad! */
-            cursor: pointer; z-index: 10;
+            transition: all 0.15s ease-out;
+            cursor: pointer; 
+            z-index: 10;
             display: flex; align-items: center; justify-content: center;
-            min-width: 140px; text-transform: uppercase;
+            min-width: 120px; 
+            font-size: 12px; /* Más pequeño para móvil */
+            padding: 10px;
+            text-align: center;
+        }
+        /* Panel súper chiquito */
+        #panel-admin {
+            position: fixed; top: 5px; right: 5px;
+            background: rgba(255,255,255,0.05); 
+            padding: 5px;
+            border-radius: 5px; z-index: 1000; 
+            backdrop-filter: blur(10px);
+            width: 110px; /* Muy estrecho */
+        }
+        #panel-admin input {
+            width: 100%; font-size: 9px; padding: 2px; margin-bottom: 2px;
+            background: #222; color: white; border: none; border-radius: 2px;
         }
         #boton-control {
-            position: fixed; bottom: 2px; right: 2px;
-            font-size: 6px; padding: 1px 3px; opacity: 0.1;
+            position: fixed; bottom: 2px; left: 2px;
+            font-size: 6px; opacity: 0.1; color: white;
         }
-        #boton-control:hover { opacity: 0.8; background: red; color: white; }
-        
-        #panel-admin {
-            position: fixed; top: 10px; right: 10px;
-            background: rgba(255,255,255,0.1); padding: 10px;
-            border-radius: 8px; z-index: 1000; backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .instruccion { font-size: 8px; color: #aaa; margin-top: 5px; text-align: center; }
     </style>
 </head>
 <body class="h-screen w-screen">
 
     <button id="boton-control" onclick="detenido = !detenido">detener</button>
 
-    <div id="panel-admin" class="flex flex-col gap-2">
-        <input type="text" id="nombre-app" placeholder="Nombre" class="p-1 text-xs rounded border-none">
-        <input type="text" id="url-app" placeholder="Carpeta (ej: bodega)" class="p-1 text-xs rounded border-none">
-        <button onclick="agregarNuevaUrl()" class="bg-yellow-400 text-black text-[10px] font-bold py-1 rounded">AÑADIR +</button>
-        <button onclick="limpiarPantalla()" class="bg-red-600 text-white text-[10px] font-bold py-1 rounded">BORRAR TODO 🗑️</button>
-        <p class="instruccion">TIP: Alt + Clic para borrar uno solo</p>
+    <div id="panel-admin">
+        <input type="text" id="nombre-app" placeholder="Nombre...">
+        <input type="text" id="url-app" placeholder="Carpeta...">
+        <div class="flex gap-1">
+            <button onclick="agregarNuevaUrl()" class="bg-yellow-400 text-[8px] font-bold p-1 flex-1 rounded">AÑADIR</button>
+            <button onclick="limpiarPantalla()" class="bg-red-600 text-[8px] text-white p-1 rounded">🗑️</button>
+        </div>
     </div>
 
-    <div class="fixed top-10 left-10 z-50 pointer-events-none">
-        <h1 class="text-4xl font-black text-white leading-none">VIBRAS<br><span class="text-yellow-400">POSITIVAS</span></h1>
+    <div class="fixed top-4 left-4 z-50 pointer-events-none">
+        <h1 class="text-xl font-black text-white leading-none">VIBRAS<br><span class="text-yellow-400 text-2xl">POSS</span></h1>
     </div>
 
     <div id="contenedor-principal" class="w-full h-full relative"></div>
@@ -54,30 +68,33 @@
 
         function crearBoton(negocio) {
             const boton = document.createElement('a');
-            // Si la ruta ya es una URL completa la usa, si no, la construye
             boton.href = negocio.ruta.includes('http') ? negocio.ruta : baseLink + negocio.ruta;
             boton.target = "_blank";
             boton.innerText = negocio.nombre;
-            boton.className = `boton-loco ${negocio.color} text-white px-4 py-3 rounded-xl font-black border-2 border-white/50 shadow-xl`;
+            boton.className = `boton-loco ${negocio.color} text-white rounded-xl font-bold border border-white/30 shadow-lg`;
             
-            // Posición inicial
-            boton.style.left = Math.random() * (window.innerWidth - 150) + 'px';
-            boton.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+            // Posicionamiento inicial aleatorio dentro de los límites
+            boton.style.left = Math.random() * (window.innerWidth - 130) + 'px';
+            boton.style.top = Math.random() * (window.innerHeight - 130) + 'px';
 
-            // Borrar con Alt + Clic
+            // Para quitar en móvil: toque largo (300ms) o Alt+Click en PC
+            let timer;
+            boton.ontouchstart = () => timer = setTimeout(() => boton.remove(), 600);
+            boton.ontouchend = () => clearTimeout(timer);
+            
             boton.onclick = (e) => {
-                if (e.altKey) {
-                    e.preventDefault();
-                    boton.remove();
-                }
+                if (e.altKey) { e.preventDefault(); boton.remove(); }
             };
 
-            // Movimiento loco
-            boton.onmouseover = () => {
+            // Movimiento loco (en móvil se mueve al tocarlo)
+            const mover = () => {
                 if (detenido) return;
-                boton.style.left = Math.random() * (window.innerWidth - 150) + 'px';
-                boton.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+                boton.style.left = Math.random() * (window.innerWidth - 130) + 'px';
+                boton.style.top = Math.random() * (window.innerHeight - 130) + 'px';
             };
+
+            boton.onmouseover = mover;
+            boton.ontouchmove = mover;
             
             contenedor.appendChild(boton);
         }
@@ -87,25 +104,22 @@
             const ruta = document.getElementById('url-app').value;
             if(nombre && ruta) {
                 const colores = ['bg-pink-600', 'bg-blue-600', 'bg-green-600', 'bg-purple-600', 'bg-orange-600'];
-                const colorAzar = colores[Math.floor(Math.random() * colores.length)];
-                crearBoton({ nombre: nombre, ruta: ruta, color: colorAzar });
+                crearBoton({ nombre: nombre, ruta: ruta, color: colores[Math.floor(Math.random()*5)] });
                 document.getElementById('nombre-app').value = "";
                 document.getElementById('url-app').value = "";
             }
         }
 
         function limpiarPantalla() {
-            if(confirm("¿Quieres borrar todos los botones?")) {
-                contenedor.innerHTML = "";
-            }
+            if(confirm("¿Borrar todo?")) contenedor.innerHTML = "";
         }
 
-        // Cargar los iniciales por defecto
+        // Apps iniciales
         const iniciales = [
-            { nombre: "DISTRILECO 🏢", ruta: "distrileco/", color: "bg-blue-600" },
-            { nombre: "BODEGA 🏪", ruta: "bodega-la-central/", color: "bg-red-600" },
-            { nombre: "JM 🚚", ruta: "distribuciones-jm/", color: "bg-emerald-600" },
-            { nombre: "EDOGRA 📦", ruta: "edogra-distribuciones/", color: "bg-purple-600" }
+            { nombre: "DISTRILECO", ruta: "distrileco/", color: "bg-blue-600" },
+            { nombre: "BODEGA", ruta: "bodega-la-central/", color: "bg-red-600" },
+            { nombre: "JM", ruta: "distribuciones-jm/", color: "bg-emerald-600" },
+            { nombre: "EDOGRA", ruta: "edogra-distribuciones/", color: "bg-purple-600" }
         ];
         iniciales.forEach(crearBoton);
     </script>
