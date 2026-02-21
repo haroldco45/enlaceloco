@@ -3,26 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Directorio Loco | Vibras Positivas</title>
+    <title>Universo Vibras Positivas | HaroldCo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background-color: #0f172a;
-            overflow: hidden; /* Para que los links no se salgan de la pantalla */
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #050505;
+            overflow: hidden; 
+            font-family: 'Arial Black', sans-serif;
+            background-image: radial-gradient(circle, #1e293b 1px, transparent 1px);
+            background-size: 30px 30px;
         }
         .crazy-link {
             position: absolute;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             user-select: none;
+            z-index: 10;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .floating {
-            animation: float 3s ease-in-out infinite;
+            animation: float 5s ease-in-out infinite;
         }
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(-20px) rotate(3deg); }
         }
         #logo-container {
             position: fixed;
@@ -30,69 +37,116 @@
             right: 20px;
             z-index: 100;
         }
+        #logo-container img {
+            width: 110px;
+            filter: drop-shadow(0 0 10px #fbbf24);
+        }
+        .category-tag {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            background: rgba(0,0,0,0.3);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col items-center justify-center">
+<body class="h-screen w-screen">
 
     <div id="logo-container">
-        <img src="VIBRASPOSITIVAS.PNG" alt="Vibras Positivas Logo" class="w-32 hover:scale-110 transition-transform">
+        <img src="VIBRASPOSITIVAS.PNG" alt="Logo Vibras" class="hover:scale-110 transition-transform">
     </div>
 
-    <h1 class="text-4xl font-bold text-yellow-400 mb-8 z-50 text-center">✨ ¡Toca un link si puedes! ✨</h1>
+    <div class="fixed top-6 left-6 z-50 pointer-events-none">
+        <h1 class="text-4xl md:text-6xl font-black text-white leading-none">VIBRAS<br><span class="text-yellow-400">WORLD</span></h1>
+        <p class="text-gray-400 text-xs mt-2 tracking-[0.3em] font-bold">MULTINEGOCIOS & APPS</p>
+    </div>
 
-    <div id="canvas" class="relative w-full h-full">
-        </div>
+    <div id="canvas" class="w-full h-full relative"></div>
 
     <script>
-        const links = [
-            { name: "Google", url: "https://google.com", color: "bg-pink-500" },
-            { name: "YouTube", url: "https://youtube.com", color: "bg-red-500" },
-            { name: "Mi Facebook", url: "#", color: "bg-blue-500" },
-            { name: "Música Chill", url: "#", color: "bg-green-500" },
-            { name: "Sorpresa 🎁", url: "#", color: "bg-purple-500" },
-            { name: "Vibras ⚡", url: "#", color: "bg-yellow-500" }
+        const apps = [
+            // CATEGORÍA: DISTRILECO (Consumo Masivo)
+            { name: "SUPER ARROZ", path: "super-arroz-app", color: "bg-orange-600", tag: "DISTRILECO" },
+            { name: "VISTA HERMOSA", path: "vista-hermosa-cat", color: "bg-emerald-600", tag: "PRODUCTOS" },
+            { name: "DISTRILECO VENTAS", path: "distrileco-main", color: "bg-blue-700", tag: "B2B" },
+            
+            // CATEGORÍA: RESTAURANTES & COMIDA
+            { name: "EL BUEN SABOR", path: "restaurante-sabor", color: "bg-red-500", tag: "RESTAURANTE" },
+            { name: "VIBRAS FOOD", path: "vibras-food", color: "bg-yellow-600", tag: "COMIDA" },
+            { name: "MENÚ DIGITAL", path: "menu-interactivo", color: "bg-rose-500", tag: "DELIVERY" },
+            
+            // CATEGORÍA: SERVICIOS
+            { name: "LOGÍSTICA", path: "servicios-logistica", color: "bg-slate-500", tag: "SERVICIOS" },
+            { name: "ASESORÍAS", path: "asesoria-vibras", color: "bg-indigo-600", tag: "PRO" },
+            { name: "REPOSICIÓN", path: "reposicion-vibras", color: "bg-cyan-600", tag: "RETIRO" },
+            
+            // CATEGORÍA: APPS & TECNOLOGÍA
+            { name: "APP NOTAS ✨", path: "app-notas-vibras", color: "bg-pink-500", tag: "HERRAMIENTA" },
+            { name: "CALCULADORA", path: "calculadora-cool", color: "bg-violet-500", tag: "TECH" },
+            { name: "VIBRAS MAIN", path: "vibras-main", color: "bg-yellow-400", tag: "PORTAL" },
+            { name: "MARKETPLACE", path: "market-vibras", color: "bg-teal-500", tag: "TIENDA" },
+            
+            // CATEGORÍA: OTROS
+            { name: "SORPRESA 🎁", path: "app-sorpresa", color: "bg-lime-500", tag: "EXTRA" },
+            { name: "EVENTOS", path: "vibras-eventos", color: "bg-fuchsia-600", tag: "SOCIAL" }
         ];
 
+        const username = "haroldco45";
+        const repo = "vibras-positivas-apps";
         const canvas = document.getElementById('canvas');
 
-        links.forEach((link, index) => {
+        apps.forEach((app) => {
             const btn = document.createElement('a');
-            btn.href = link.url;
+            btn.href = `https://${username}.github.io/${repo}/${app.path}/`;
             btn.target = "_blank";
-            btn.innerText = link.name;
-            btn.className = `crazy-link ${link.color} text-white px-6 py-3 rounded-full font-bold shadow-lg border-2 border-white floating`;
             
-            // Posición inicial aleatoria
-            let x = Math.random() * (window.innerWidth - 150);
-            let y = Math.random() * (window.innerHeight - 150);
+            // Crear el contenido del botón con etiqueta de categoría
+            btn.innerHTML = `
+                <div class="flex flex-col items-start">
+                    <span class="category-tag">${app.tag}</span>
+                    <span>${app.name}</span>
+                </div>
+            `;
             
+            btn.className = `crazy-link ${app.color} text-white px-6 py-3 rounded-xl font-black shadow-[6px_6px_0px_0px_rgba(255,255,255,0.2)] border-2 border-white/50 floating`;
+            
+            // Posicionamiento aleatorio inicial
+            let x = Math.random() * (window.innerWidth - 220);
+            let y = Math.random() * (window.innerHeight - 200);
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
 
-            // EFECTO LOCO: El botón escapa cuando intentas clickearlo (al pasar el mouse)
+            // Lógica de escape mejorada
             btn.onmouseover = () => {
-                const newX = Math.random() * (window.innerWidth - 150);
-                const newY = Math.random() * (window.innerHeight - 150);
+                const newX = Math.random() * (window.innerWidth - 220);
+                const newY = Math.random() * (window.innerHeight - 200);
                 btn.style.left = newX + 'px';
                 btn.style.top = newY + 'px';
-                btn.style.transform = `scale(${Math.random() + 0.5}) rotate(${Math.random() * 360}deg)`;
+                btn.style.transform = `scale(${Math.random() * 0.4 + 0.9}) rotate(${Math.random() * 40 - 20}deg)`;
+                btn.style.zIndex = parseInt(btn.style.zIndex || 10) + 1;
             };
 
             canvas.appendChild(btn);
         });
 
-        // Crear partículas de "Vibras Positivas" al hacer click
+        // Efecto visual de fondo al hacer clic
         window.onclick = (e) => {
-            const star = document.createElement('div');
-            star.innerText = "✨";
-            star.style.position = "fixed";
-            star.style.left = e.clientX + "px";
-            star.style.top = e.clientY + "px";
-            star.style.fontSize = "24px";
-            star.style.pointerEvents = "none";
-            document.body.appendChild(star);
-            
-            setTimeout(() => star.remove(), 1000);
+            if(e.target.tagName !== 'A' && e.target.parentNode.tagName !== 'A') {
+                const ring = document.createElement('div');
+                ring.className = "fixed border-4 border-yellow-400 rounded-full pointer-events-none z-0";
+                ring.style.left = e.clientX + "px";
+                ring.style.top = e.clientY + "px";
+                ring.style.width = "10px";
+                ring.style.height = "10px";
+                document.body.appendChild(ring);
+
+                ring.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: 'translate(-50%, -50%) scale(20)', opacity: 0 }
+                ], { duration: 600, easing: 'ease-out' });
+
+                setTimeout(() => ring.remove(), 600);
+            }
         };
     </script>
 </body>
